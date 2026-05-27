@@ -7,6 +7,37 @@ document.addEventListener('DOMContentLoaded', () => {
     yearSpan.textContent = new Date().getFullYear();
   }
 
+  const header = document.querySelector('.header');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const primaryNavigation = document.getElementById('primary-navigation');
+
+  const closeNavigation = () => {
+    if (!header || !menuToggle || !primaryNavigation) return;
+    header.classList.remove('is-open');
+    primaryNavigation.classList.remove('is-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleNavigation = () => {
+    if (!header || !menuToggle || !primaryNavigation) return;
+    const isOpen = header.classList.toggle('is-open');
+    primaryNavigation.classList.toggle('is-open', isOpen);
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  };
+
+  if (menuToggle && primaryNavigation && header) {
+    menuToggle.addEventListener('click', toggleNavigation);
+    primaryNavigation.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeNavigation);
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        closeNavigation();
+      }
+    });
+  }
+
   // Basic event tracking for Conversion Rate Optimization (CRO)
   const trackEvent = (eventName, eventData = {}) => {
     // Placeholder for Google Tag Manager / GA4 / Meta Pixel
@@ -53,6 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const animatedElements = document.querySelectorAll('.animate-on-scroll');
   animatedElements.forEach(el => observer.observe(el));
+
+  const heroTextBox = document.querySelector('.hero .animate-on-scroll');
+  if (heroTextBox) {
+    window.requestAnimationFrame(() => {
+      heroTextBox.classList.add('is-visible');
+    });
+  }
 
   // Parallax Effect for Hero Image and Decorative Isotipos
   const heroImg = document.getElementById('hero-img');

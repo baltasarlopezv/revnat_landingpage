@@ -451,11 +451,9 @@ section { padding: 8rem 0; } /* Maximum breathing room */
 
 @media (min-width: 1024px) {
   .benefits-grid { grid-template-columns: repeat(4, 1fr); }
-  .stone-card { flex-direction: row; align-items: stretch; gap: 0; }
-  .stone-card:nth-child(even) { flex-direction: row-reverse; }
-  .stone-img-container { width: 50%; max-width: none; }
-  .stone-content { width: 50%; padding: 2.5rem 2.25rem; display: flex; flex-direction: column; justify-content: center; }
-  .stone-grid { grid-template-columns: 1fr; gap: 8rem; }
+  .stone-card { flex-direction: column; gap: 0; }
+  .stone-card:nth-child(even) { flex-direction: column; }
+  .stone-grid { grid-template-columns: repeat(2, 1fr); gap: 3.5rem; }
 }
 
 /* Brandbook-aligned overrides */
@@ -1047,33 +1045,29 @@ section {
   }
 
   .stone-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
   }
 
   .stone-card {
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
   }
 
   .stone-card:nth-child(even) {
-    flex-direction: row-reverse;
-  }
-
-  .stone-img-container,
-  .stone-content {
-    flex: 1 1 0;
+    flex-direction: column;
   }
 
   .stone-img-container {
-    flex: 0 0 46%;
-    max-width: 460px;
+    height: 320px;
+  }
+
+  .stone-img-full {
+    height: 100%;
+    object-fit: cover;
   }
 
   .stone-content {
-    flex: 0 0 54%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     padding: 1.85rem;
   }
 
@@ -1141,15 +1135,22 @@ section {
   }
 
   .stone-grid {
-    gap: 3rem;
-  }
-
-  .stone-content {
-    padding: 2.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.5rem;
   }
 
   .stone-img-container {
+    height: 360px;
     max-width: none;
+  }
+
+  .stone-img-full {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .stone-content {
+    padding: 2rem;
   }
 
   .social-proof-section h2 {

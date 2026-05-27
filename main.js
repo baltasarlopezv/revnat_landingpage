@@ -16,13 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const primaryNavigation = document.getElementById('primary-navigation');
   const logoLink = document.querySelector('.logo a');
   const heroFocusBox = document.querySelector('.hero-text-box');
-  const pageStartOffset = Number.parseFloat(
+
+  const getPageStartOffset = () => Number.parseFloat(
     getComputedStyle(document.documentElement).getPropertyValue('--page-start-offset')
-  ) || 180;
+  ) || 0;
 
   const scrollToPageStart = (behavior = 'smooth') => {
-    const heroTop = heroFocusBox ? heroFocusBox.getBoundingClientRect().top + window.scrollY : 0;
-    const targetTop = heroFocusBox ? Math.max(0, heroTop - pageStartOffset) : pageStartOffset;
+    const heroRect = heroFocusBox ? heroFocusBox.getBoundingClientRect() : null;
+    const heroTop = heroRect ? heroRect.top + window.scrollY : 0;
+    const targetTop = heroFocusBox
+      ? Math.max(0, heroTop - getPageStartOffset())
+      : getPageStartOffset();
     window.scrollTo({ top: targetTop, behavior });
   };
 
@@ -143,12 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroImg = document.getElementById('hero-img');
   const parallaxIsos = document.querySelectorAll('.parallax-iso');
   let parallaxTicking = false;
+  const heroParallaxStrength = window.innerWidth < 768 ? 0.08 : 0.12;
+  const heroParallaxScale = window.innerWidth < 768 ? 1.12 : 1.08;
 
   const updateParallax = () => {
     const scrollPos = window.scrollY;
 
     if (heroImg) {
-      heroImg.style.transform = `translate3d(0, ${scrollPos * 0.18}px, 0)`;
+      heroImg.style.transform = `translate3d(0, ${scrollPos * heroParallaxStrength}px, 0) scale(${heroParallaxScale})`;
     }
 
     parallaxIsos.forEach(iso => {

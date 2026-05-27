@@ -7,9 +7,56 @@ document.addEventListener('DOMContentLoaded', () => {
     yearSpan.textContent = new Date().getFullYear();
   }
 
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
   const header = document.querySelector('.header');
   const menuToggle = document.querySelector('.menu-toggle');
   const primaryNavigation = document.getElementById('primary-navigation');
+  const logoLink = document.querySelector('.logo a');
+  const heroFocusBox = document.querySelector('.hero-text-box');
+  const pageStartOffset = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--page-start-offset')
+  ) || 180;
+
+  const scrollToPageStart = (behavior = 'smooth') => {
+    const heroTop = heroFocusBox ? heroFocusBox.getBoundingClientRect().top + window.scrollY : 0;
+    const targetTop = heroFocusBox ? Math.max(0, heroTop - pageStartOffset) : pageStartOffset;
+    window.scrollTo({ top: targetTop, behavior });
+  };
+
+  const enforcePageStartOffset = (behavior = 'auto') => {
+    scrollToPageStart(behavior);
+    window.requestAnimationFrame(() => scrollToPageStart(behavior));
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => scrollToPageStart(behavior));
+    });
+    window.setTimeout(() => scrollToPageStart(behavior), 80);
+  };
+
+  if (!window.location.hash || window.location.hash === '#') {
+    enforcePageStartOffset('auto');
+    window.addEventListener('load', () => enforcePageStartOffset('auto'), { once: true });
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        enforcePageStartOffset('auto');
+      }
+    });
+  }
+
+  if (logoLink) {
+    logoLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      scrollToPageStart('smooth');
+    });
+  }
+
+  window.addEventListener('hashchange', () => {
+    if (!window.location.hash || window.location.hash === '#') {
+      scrollToPageStart('smooth');
+    }
+  });
 
   const closeNavigation = () => {
     if (!header || !menuToggle || !primaryNavigation) return;
